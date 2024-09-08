@@ -1,6 +1,9 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { env } from "./env.js";
-import { FileWithRange, FileWithUpdatedContent } from "./types/file.js";
+import {
+  FileWithRangeAndDescription,
+  FileWithUpdatedContent,
+} from "./types/file.js";
 
 export class ClaudeSonnetClient {
   private client: Anthropic;
@@ -12,7 +15,7 @@ export class ClaudeSonnetClient {
   }
 
   async invokeModelWithCode(
-    files: FileWithRange[]
+    files: FileWithRangeAndDescription[]
   ): Promise<FileWithUpdatedContent[]> {
     const prompt = this.createPrompt(files);
 
@@ -65,7 +68,7 @@ export class ClaudeSonnetClient {
     }
   }
 
-  private createPrompt(files: FileWithRange[]): string {
+  private createPrompt(files: FileWithRangeAndDescription[]): string {
     const prompt = `
       The following are some files and ranges within each. They correspond to feature flags that should be removed.
       Please provide the updated content for each file with the feature flag and its dependent code removed in JSON format. 
@@ -87,6 +90,7 @@ export class ClaudeSonnetClient {
           (file) => `
         File: ${file.path}
         Range: ${file.range.start}-${file.range.end}
+        Flag Name: ${file.description}
         Content:
         ${file.content}
       `

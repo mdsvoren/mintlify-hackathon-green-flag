@@ -5,7 +5,7 @@ import {
 } from "./greptile.js";
 import { getSnippetChangeDate } from "./blame.js";
 import { Octokit } from "octokit";
-import { FileWithRange } from "./types/file.js";
+import { FileWithRangeAndDescription } from "./types/file.js";
 import { ClaudeSonnetClient } from "./anthropic-client.js";
 import { getBlob, getOctokit } from "./github-app.js";
 
@@ -16,7 +16,7 @@ export async function analyzeFeatureFlags(
   branch: string,
   owner: string
 ) {
-  let fileWithRanges: FileWithRange[] = [];
+  let fileWithRanges: FileWithRangeAndDescription[] = [];
 
   try {
     // Fetch feature flags
@@ -90,6 +90,7 @@ export async function analyzeFeatureFlags(
         start: flag.line_start || 0,
         end: flag.line_end || 0,
       },
+      description: flag.feature_flag_name,
     }));
 
     // Append usage data to fileWithRanges
@@ -109,6 +110,7 @@ export async function analyzeFeatureFlags(
               start: usage.line_start,
               end: usage.line_end,
             },
+            description: flag.feature_flag_name,
           });
         }
       }
