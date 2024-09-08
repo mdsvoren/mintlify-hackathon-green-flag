@@ -3,13 +3,17 @@ import { getOctokit, githubApp } from "./github-app.js";
 import { Octokit } from "octokit";
 import { env } from "./env.js";
 import { ClaudeSonnetClient } from "./anthropic-client.js";
+import { fetchFeatureFlags } from "./greptile.js";
+import { analyzeFeatureFlags } from "./analyze.js";
 
 const app = express();
 
-app.post("/check/:owner/:repo", async function (req, res) {
+app.get("/check/:owner/:repo", async function (req, res) {
   try {
     const { owner, repo } = req.params;
     const octokit = await getOctokit(owner, repo);
+    const analysis = await analyzeFeatureFlags(octokit, anthropicClient, repo, 'main', owner);
+    console.log(JSON.stringify(analysis, null, 2));
   } catch (e) {
     console.error(e);
     return res.status(500).send();

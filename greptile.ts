@@ -41,6 +41,7 @@ export const fetchFeatureFlags = async (
     });
 
     if (!response.ok) {
+      console.error(`HTTP error! response: ${await response.text()}`);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
