@@ -123,6 +123,11 @@
         .submit-button:hover {
             background-color: #065f46;
         }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -187,9 +192,14 @@
                 <div class="card-gradient-1 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card">
                     <h2 class="text-3xl font-semibold mb-3">Green Flag introduces automation</h2>
                     <p>Automated feature flag management</p>
-                    <button id="automateButton" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
-                        Automate Feature Flags
-                    </button>
+                    <div class="flex mt-4 space-x-4">
+                        <a href="https://github.com" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 font-poppins">
+                            View messy codebase
+                        </a>
+                        <button id="removeStaleFlags" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 font-poppins">
+                            Remove Stale Feature Flags
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="timeline-item" data-aos="fade-left">
@@ -266,12 +276,6 @@
             });
         }
 
-        // Add button functionality
-        document.getElementById('automateButton').addEventListener('click', function() {
-            alert('Automated feature flag management job started!');
-            // Here you can add more functionality, like changing the button state or triggering an actual job
-        });
-
         // Function to handle feature flag submission
         function submitFeatureFlag() {
             const input = document.getElementById('nextFeatureFlag');
@@ -290,6 +294,11 @@
         });
 
         document.getElementById('submitFeatureFlag').addEventListener('click', submitFeatureFlag);
+
+        // Add functionality for the "Remove Stale Feature Flags" button
+        document.getElementById('removeStaleFlags').addEventListener('click', function() {
+            console.log('Removing stale feature flags...');
+        });
     </script>
 </body>
 </html>
