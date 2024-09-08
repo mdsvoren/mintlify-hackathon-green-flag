@@ -66,7 +66,7 @@ export class ClaudeSonnetClient {
   }
 
   private createPrompt(files: FileWithRange[]): string {
-    return `
+    const prompt = `
       The following are some files and ranges within each. They correspond to feature flags that should be removed.
       Please provide the updated content for each file with the feature flag and its dependent code removed in JSON format. 
       The updated content should be a string containing the original content with the feature flag and its dependent code removed.
@@ -92,5 +92,8 @@ export class ClaudeSonnetClient {
         )
         .join("\n\n")}
     `;
+
+    console.log(`Prompt: ${prompt}`);
+    return prompt;
   }
 }
