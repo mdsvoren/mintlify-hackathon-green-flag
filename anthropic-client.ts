@@ -30,7 +30,7 @@ class ClaudeSonnetClient {
   private createPrompt(files: FileWithRange[]): string {
     return `
       The following are some files and ranges within each. They correspond to feature flags that should be removed.
-      Please provide the updated content for each file in JSON format. e.g.:
+      Please provide the updated content for each file with the feature flag and its dependent code removed in JSON format. e.g.:
       {
         "file_path": "path/to/file.ts",
         "updated_content": "updated content"
