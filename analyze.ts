@@ -1,4 +1,8 @@
-import { fetchFeatureFlags, FeatureFlag } from "./greptile.js";
+import {
+  fetchFeatureFlags,
+  FeatureFlag,
+  fetchFeatureFlagUsage,
+} from "./greptile.js";
 import { getSnippetChangeDate } from "./blame.js";
 import { Octokit } from "octokit";
 import { FileWithRange } from "./types/file.js";
@@ -38,7 +42,7 @@ export async function analyzeFeatureFlags(
       });
 
       console.log(
-        `Feature flag in ${flag.file_path} (lines ${flag.line_start}-${flag.line_end}) last changed on: ${flag.change_date}`
+        `Feature flag ${flag.feature_flag_name} in ${flag.file_path} (lines ${flag.line_start}-${flag.line_end}) last changed on: ${flag.change_date}`
       );
     }
 
@@ -46,22 +50,22 @@ export async function analyzeFeatureFlags(
     const twoMonthsAgo = new Date();
     twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
 
-    const recentFeatureFlags = featureFlags.filter(
+    const staleFeatureFlags = featureFlags.filter(
       (flag) => flag.change_date && flag.change_date < twoMonthsAgo
     );
 
     console.log(
-      `Number of feature flags newer than 2 months: ${recentFeatureFlags.length}`
+      `Number of feature flags older than 2 months: ${staleFeatureFlags.length}`
     );
 
     const fileContentMap = new Map<string, string>();
 
-    for (const flag of recentFeatureFlags) {
+    for (const flag of staleFeatureFlags) {
       const content = await getBlob(octokit, owner, repository, flag.file_path);
       fileContentMap.set(flag.file_path, content);
     }
 
-    const fileWithRanges: FileWithRange[] = recentFeatureFlags.map((flag) => ({
+    const fileWithRanges: FileWithRange[] = staleFeatureFlags.map((flag) => ({
       path: flag.file_path,
       content: fileContentMap.get(flag.file_path) ?? "",
       range: {

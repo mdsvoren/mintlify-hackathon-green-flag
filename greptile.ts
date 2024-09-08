@@ -4,6 +4,7 @@ export interface FeatureFlag {
   file_path: string;
   line_start: number;
   line_end: number;
+  feature_flag_name: string;
   change_date: Date | null;
 }
 
@@ -33,7 +34,7 @@ export const fetchFeatureFlags = async (
           {
             id: "123456",
             content:
-              'Provide a structured JSON output with the filepath, linestart, lineend, and feature_flag_name of all areas that use feature flags. Include only the lines directly relevant to each specific feature flag. Provide only the JSON and nothing else. The output should be in the following format: [{"filepath": "path/to/file", "linestart": 10, "lineend": 15, "feature_flag_name": "example_flag"}, ...]',
+              'Find the file in the repository that manages feature flags, typically named with "feature_flags" or similar. For each feature flag definition, provide a structured JSON object with the file_path, line_start, line_end, and feature_flag_name. The line_start and line_end should encompass only the lines relevant to that specific feature flag, not including other flags. Feature flag definitions typically only require one line, so line_start and line_end will typically be the same line. The output must be a valid JSON array in the following format: [{"file_path": "path/to/feature_flags_file.js", "line_start": 5, "line_end": 5, "feature_flag_name": "EXAMPLE_FLAG"}, ...]. Ensure that each object in the array represents a single feature flag with its exact line range. Your response must contain an object we can load with JSON.parse(), without any additional text, formatting, or code blocks.',
             role: "user",
           },
         ],
@@ -53,26 +54,75 @@ export const fetchFeatureFlags = async (
     }
 
     const responseData = await response.json();
-    const featureFlagsData = JSON.parse(
-      responseData.message.match(/```json\n([\s\S]*?)\n```/)[1]
+    const featureFlagsData = JSON.parse(responseData.message);
+    console.log(featureFlagsData);
+    // Filter out repeated feature flag names
+    const uniqueFeatureFlags = featureFlagsData.filter(
+      (flag: FeatureFlag, index: number, self: FeatureFlag[]) =>
+        index ===
+        self.findIndex((t) => t.feature_flag_name === flag.feature_flag_name)
     );
-    return featureFlagsData.map(
+    return uniqueFeatureFlags.map(
       ({
-        filepath,
-        linestart,
-        lineend,
+        file_path,
+        line_start,
+        line_end,
+        feature_flag_name,
       }: {
-        filepath: string;
-        linestart: number;
-        lineend: number;
+        file_path: string;
+        line_start: number;
+        line_end: number;
+        feature_flag_name: string;
       }) => ({
-        file_path: filepath.substring(1),
-        line_start: linestart,
-        line_end: lineend,
+        file_path: file_path.substring(1),
+        line_start,
+        line_end,
+        feature_flag_name,
       })
     );
   } catch (error) {
     console.error("Error fetching feature flags:", error);
+    throw error;
+  }
+};
+
+export const fetchFeatureFlagUsage = async (
+  owner: string,
+  repository: string,
+  branch: string,
+  featureFlags: FeatureFlag[]
+) => {
+  const greptile_api_key = env.GREPTILE_API_KEY;
+  const github_token = env.GITHUB_TOKEN;
+
+  try {
+    const response = await fetch("https://api.greptile.com/api/v2/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": greptile_api_key,
+      },
+      body: JSON.stringify({
+        github_token: github_token,
+        owner: owner,
+        repository: repository,
+        branch: branch,
+        query: featureFlags.map((flag) => flag.feature_flag_name).join(" OR "),
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`HTTP error! response: ${await response.text()}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    const featureFlagUsageData = JSON.parse(responseData.message);
+    console.log(featureFlagUsageData);
+
+    return featureFlagUsageData;
+  } catch (error) {
+    console.error("Error fetching feature flag usage:", error);
     throw error;
   }
 };
