@@ -47,7 +47,7 @@ export async function analyzeFeatureFlags(
     twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
 
     const recentFeatureFlags = featureFlags.filter(
-      (flag) => flag.change_date && new Date(flag.change_date) > twoMonthsAgo
+      (flag) => flag.change_date && (flag.change_date < twoMonthsAgo)
     );
 
     console.log(
