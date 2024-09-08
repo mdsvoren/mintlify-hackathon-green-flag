@@ -33,7 +33,7 @@ export const fetchFeatureFlags = async (
           {
             id: "123456",
             content:
-              'Provide a structured JSON output with the filepath, linestart, and lineend of all areas that use feature flags. Provide only the JSON and nothing else. The output should be in the following format: [{"filepath": "path/to/file", "linestart": 10, "lineend": 15}, ...]',
+              'Provide a structured JSON output with the filepath, linestart, lineend, and feature_flag_name of all areas that use feature flags. Include only the lines directly relevant to each specific feature flag. Provide only the JSON and nothing else. The output should be in the following format: [{"filepath": "path/to/file", "linestart": 10, "lineend": 15, "feature_flag_name": "example_flag"}, ...]',
             role: "user",
           },
         ],

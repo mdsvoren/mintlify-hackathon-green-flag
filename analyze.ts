@@ -47,7 +47,7 @@ export async function analyzeFeatureFlags(
     twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
 
     const recentFeatureFlags = featureFlags.filter(
-      (flag) => flag.change_date && (flag.change_date < twoMonthsAgo)
+      (flag) => flag.change_date && flag.change_date < twoMonthsAgo
     );
 
     console.log(
@@ -55,7 +55,7 @@ export async function analyzeFeatureFlags(
     );
 
     const fileContentMap = new Map<string, string>();
-    
+
     for (const flag of recentFeatureFlags) {
       const content = await getBlob(octokit, owner, repository, flag.file_path);
       fileContentMap.set(flag.file_path, content);

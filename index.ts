@@ -14,8 +14,14 @@ app.get("/check/:owner/:repo", async function (req, res) {
     const octokit = await getOctokit(owner, repo);
     const anthropicClient = new ClaudeSonnetClient();
 
-    const analysis = await analyzeFeatureFlags(octokit, anthropicClient, repo, 'main', owner);
-    const changedFiles = await anthropicClient.invokeModelWithCode(analysis)
+    const analysis = await analyzeFeatureFlags(
+      octokit,
+      anthropicClient,
+      repo,
+      "main",
+      owner
+    );
+    const changedFiles = await anthropicClient.invokeModelWithCode(analysis);
     const prUrl = await createPr(octokit, owner, repo, changedFiles);
     console.log(`Created PR: ${prUrl}`);
   } catch (e) {
