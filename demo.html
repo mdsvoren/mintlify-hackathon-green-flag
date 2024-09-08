@@ -6,10 +6,13 @@
     <title>Vibrant Timeline Journey</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
+        }
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
         }
         .timeline::before {
             content: '';
@@ -22,7 +25,7 @@
             transform: translateX(-50%);
         }
         .timeline-item {
-            margin-bottom: 50vh;
+            margin-bottom: 70vh;
         }
         #particles-js {
             position: fixed;
@@ -32,40 +35,70 @@
             left: 0;
             z-index: -1;
         }
+        .card-gradient-1 {
+            background: linear-gradient(135deg, #e0e7ff, #818cf8);
+        }
+        .card-gradient-2 {
+            background: linear-gradient(315deg, #ddd6fe, #a78bfa);
+        }
+        .card-gradient-3 {
+            background: linear-gradient(135deg, #d1fae5, #34d399);
+        }
+        .card-gradient-4 {
+            background: linear-gradient(315deg, #fef3c7, #fbbf24);
+        }
+        .card-gradient-5 {
+            background: linear-gradient(135deg, #fce7f3, #ec4899);
+        }
+        .timeline-card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .timeline-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .timeline-card h2 {
+            transition: all 0.3s ease;
+        }
+        .timeline-card:hover h2 {
+            transform: scale(1.05);
+            color: #4338ca;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <div id="particles-js"></div>
     <div class="container mx-auto px-4 py-16 relative">
-        <h1 class="text-5xl font-bold text-center mb-16 text-gray-800" data-aos="fade-down">Journey Through Time</h1>
+        <h1 class="text-6xl font-bold text-center mb-16 text-gray-800 tracking-wide" data-aos="fade-down" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Journey Through Time</h1>
         <div class="timeline relative">
             <div class="timeline-item" data-aos="fade-right">
-                <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8">
-                    <h2 class="text-2xl font-semibold mb-3">Past</h2>
+                <div class="card-gradient-1 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card">
+                    <h2 class="text-3xl font-semibold mb-3">Past</h2>
                     <p>The beginning of our journey, where it all started.</p>
                 </div>
             </div>
             <div class="timeline-item" data-aos="fade-left">
-                <div class="bg-purple-500 text-white p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8">
-                    <h2 class="text-2xl font-semibold mb-3">Discovery</h2>
+                <div class="card-gradient-2 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card">
+                    <h2 class="text-3xl font-semibold mb-3">Discovery</h2>
                     <p>A time of exploration and new findings.</p>
                 </div>
             </div>
             <div class="timeline-item" data-aos="fade-right">
-                <div class="bg-green-500 text-white p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8">
-                    <h2 class="text-2xl font-semibold mb-3">Innovation</h2>
+                <div class="card-gradient-3 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card">
+                    <h2 class="text-3xl font-semibold mb-3">Innovation</h2>
                     <p>Breakthroughs that changed the course of history.</p>
                 </div>
             </div>
             <div class="timeline-item" data-aos="fade-left">
-                <div class="bg-yellow-500 text-white p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8">
-                    <h2 class="text-2xl font-semibold mb-3">Progress</h2>
+                <div class="card-gradient-4 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card">
+                    <h2 class="text-3xl font-semibold mb-3">Progress</h2>
                     <p>Advancements that shaped our modern world.</p>
                 </div>
             </div>
             <div class="timeline-item" data-aos="fade-right">
-                <div class="bg-pink-500 text-white p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8">
-                    <h2 class="text-2xl font-semibold mb-3">Present</h2>
+                <div class="card-gradient-5 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card">
+                    <h2 class="text-3xl font-semibold mb-3">Present</h2>
                     <p>Where we are now, looking towards the future.</p>
                 </div>
             </div>
