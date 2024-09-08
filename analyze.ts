@@ -20,6 +20,11 @@ export async function analyzeFeatureFlags(
       branch
     );
 
+    if (featureFlags.length === 0) {
+      console.log("No feature flags found");
+      return [];
+    }
+
     // Analyze each feature flag
     for (const flag of featureFlags) {
       flag.change_date = await getSnippetChangeDate({
