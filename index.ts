@@ -31,9 +31,10 @@ webhooks.on("push", async (event) => {
 const app = express();
 app.use(express.json());
 
-app.get("/check/:owner/:repo", async function (req, res) {
+app.post("/check/:owner/:repo", async function (req, res) {
   try {
     const { owner, repo } = req.params;
+    console.log(`Checking ${owner}/${repo}`);
     const octokit = await getOctokit(owner, repo);
     const anthropicClient = new ClaudeSonnetClient();
 
@@ -46,12 +47,11 @@ app.get("/check/:owner/:repo", async function (req, res) {
     );
     const changedFiles = await anthropicClient.invokeModelWithCode(analysis);
     const prUrl = await createPr(octokit, owner, repo, changedFiles);
-    console.log(`Created PR: ${prUrl}`);
+    return res.status(200).json({ prUrl });
   } catch (e) {
     console.error(e);
     return res.status(500).send();
   }
-  return res.status(200).send();
 });
 
 app.post("/lint/:owner/:repo", async function (req, res) {

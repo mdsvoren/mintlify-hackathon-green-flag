@@ -416,12 +416,33 @@
         .getElementById("submitFeatureFlag")
         .addEventListener("click", submitFeatureFlag);
 
-      // Add functionality for the "Remove Stale Feature Flags" button
-      document
-        .getElementById("removeStaleFlags")
-        .addEventListener("click", function () {
-          console.log("Removing stale feature flags...");
+      // Update the functionality for the "Remove Stale Feature Flags" button
+      document.getElementById("removeStaleFlags").addEventListener("click", function () {
+        console.log("Removing stale feature flags...");
+        fetch('http://localhost:3000/check/mayankshouche/feature-flag-example', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include'
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Response:', data);
+          if (data.prUrl) {
+            window.open(data.prUrl, '_blank');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Failed to remove stale feature flags. Please check the console for more details.');
         });
+      });
     </script>
   </body>
 </html>
