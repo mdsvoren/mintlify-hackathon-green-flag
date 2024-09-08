@@ -34,9 +34,9 @@ export const fetchFeatureFlags = async (
     const response = await fetch("https://api.greptile.com/v2/query", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${greptile_api_key}`,
         "X-Github-Token": github_token,
-        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         messages: [
@@ -102,11 +102,12 @@ export const fetchFeatureFlagUsage = async (
   featureFlags: FeatureFlag[]
 ) => {
   try {
-    const response = await fetch("https://api.greptile.com/api/v2/query", {
+    const response = await fetch("https://api.greptile.com/v2/query", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-API-Key": greptile_api_key,
+        Authorization: `Bearer ${greptile_api_key}`,
+        "X-Github-Token": github_token,
       },
       body: JSON.stringify({
         messages: [
