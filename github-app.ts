@@ -20,7 +20,7 @@ export async function getOctokit(owner: string, repo: string) {
   return await githubApp.getInstallationOctokit(id);
 }
 
-export async function getBlob(
+export async function getBlobWithMetadata(
   octokit: Octokit,
   owner: string,
   repo: string,
@@ -42,7 +42,17 @@ export async function getBlob(
     throw new Error("Path is not a file");
   }
 
-  return Buffer.from(data.content, "base64").toString("utf-8");
+  return data;
+}
+
+export async function getBlob(
+  octokit: Octokit,
+  owner: string,
+  repo: string,
+  path: string
+) {
+  const { content } = await getBlobWithMetadata(octokit, owner, repo, path);
+  return Buffer.from(content, "base64").toString("utf-8");
 }
 
 export async function createPr(
@@ -73,11 +83,13 @@ export async function createPr(
   });
 
   for await (const { path, updatedContent } of changes) {
+    const { sha } = await getBlobWithMetadata(octokit, owner, repo, path);
     // update file
     await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
       repo,
       owner,
       path, // the path to file needed to be created
+      sha,
       message, // a commit message
       content: Buffer.from(updatedContent).toString("base64"), // the content of your file, must be base64 encoded
       branch, // the branch name we used when creating a Git reference
