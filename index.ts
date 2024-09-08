@@ -1,7 +1,7 @@
 import express from "express";
 import { createPr, getOctokit } from "./github-app.js";
 import { ClaudeSonnetClient } from "./anthropic-client.js";
-import { fetchFeatureFlags } from "./greptile.js";
+import { indexRepository } from "./greptile.js";
 import { analyzeFeatureFlags } from "./analyze.js";
 import { createNodeMiddleware, Webhooks } from "@octokit/webhooks";
 import { env } from "./env.js";
@@ -16,12 +16,13 @@ webhooks.on("push", async (event) => {
     if (event.payload.ref !== "refs/heads/main") return;
     const name = event.payload.repository.name;
     const owner = event.payload.repository.owner?.login;
+
     if (!owner) {
       console.error("No owner found");
       return;
     }
     console.log(`Reindexing ${owner}/${name}`);
-    // code to reindex
+    await indexRepository(owner, name);
   } catch (e) {
     console.error(e);
   }

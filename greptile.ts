@@ -1,5 +1,12 @@
 import { env } from "./env.js";
 
+const greptile_api_key = env.GREPTILE_API_KEY;
+const github_token = env.GITHUB_TOKEN;
+
+if (!greptile_api_key || !github_token) {
+  throw new Error("Missing required environment variables");
+}
+
 export interface FeatureFlag {
   file_path: string;
   line_start: number;
@@ -14,13 +21,6 @@ export const fetchFeatureFlags = async (
   repository: string,
   branch: string
 ): Promise<FeatureFlag[]> => {
-  const greptile_api_key = env.GREPTILE_API_KEY;
-  const github_token = env.GITHUB_TOKEN;
-
-  if (!greptile_api_key || !github_token) {
-    throw new Error("Missing required environment variables");
-  }
-
   try {
     const response = await fetch("https://api.greptile.com/v2/query", {
       method: "POST",
@@ -92,9 +92,6 @@ export const fetchFeatureFlagUsage = async (
   branch: string,
   featureFlags: FeatureFlag[]
 ) => {
-  const greptile_api_key = env.GREPTILE_API_KEY;
-  const github_token = env.GITHUB_TOKEN;
-
   try {
     const response = await fetch("https://api.greptile.com/api/v2/query", {
       method: "POST",
@@ -123,6 +120,40 @@ export const fetchFeatureFlagUsage = async (
     return featureFlagUsageData;
   } catch (error) {
     console.error("Error fetching feature flag usage:", error);
+    throw error;
+  }
+};
+
+export const indexRepository = async (owner: string, repository: string) => {
+  try {
+    const response = await fetch(
+      "https://api.greptile.com/api/v2/repositories",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": `Bearer ${greptile_api_key}`,
+          "X-Github-Token": github_token,
+        },
+        body: JSON.stringify({
+          remote: "github",
+          repository: `${owner}/${repository}`,
+          notify: true,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      console.error(`HTTP error! response: ${await response.text()}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    console.log("Repository indexed successfully:", responseData);
+
+    return responseData;
+  } catch (error) {
+    console.error("Error indexing repository:", error);
     throw error;
   }
 };
