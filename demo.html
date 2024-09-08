@@ -144,6 +144,9 @@
         font-weight: 600;
         letter-spacing: 0.025em;
       }
+      .hidden {
+        display: none;
+      }
     </style>
   </head>
   <body class="bg-gray-100">
@@ -309,6 +312,19 @@
         </div>
       </div>
     </div>
+    <div
+      id="loadingPopup"
+      class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden flex items-center justify-center"
+    >
+      <div class="bg-white p-8 rounded-md shadow-xl">
+        <div class="flex items-center space-x-4">
+          <div
+            class="animate-spin rounded-full h-10 w-10 border-b-2 border-green-500"
+          ></div>
+          <p class="text-xl font-semibold text-gray-700">Loading...</p>
+        </div>
+      </div>
+    </div>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
@@ -419,6 +435,10 @@
 
       function removeStaleFlags() {
         console.log("Removing stale feature flags...");
+
+        // Show loading popup
+        document.getElementById("loadingPopup").classList.remove("hidden");
+
         fetch(
           "http://localhost:3000/check/mayankshouche/feature-flag-example",
           {
@@ -445,6 +465,10 @@
             alert(
               "Failed to remove stale feature flags. Please check the console for more details."
             );
+          })
+          .finally(() => {
+            // Hide loading popup
+            document.getElementById("loadingPopup").classList.add("hidden");
           });
       }
     </script>
