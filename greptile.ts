@@ -9,6 +9,7 @@ export interface FeatureFlag {
 
 // HACK: This function assumes the repository has been indexed by Greptile
 export const fetchFeatureFlags = async (
+    owner: string,
   repository: string,
   branch: string
 ): Promise<FeatureFlag[]> => {
@@ -33,7 +34,7 @@ export const fetchFeatureFlags = async (
           {
             remote: "github",
             branch,
-            repository,
+            repository: `${owner}/${repository}`,
           },
         ],
       }),

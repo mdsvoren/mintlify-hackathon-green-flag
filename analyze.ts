@@ -14,6 +14,7 @@ export async function analyzeFeatureFlags(
   try {
     // Fetch feature flags
     const featureFlags: FeatureFlag[] = await fetchFeatureFlags(
+      owner,
       repository,
       branch
     );
