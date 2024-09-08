@@ -8,4 +8,6 @@ export const env = cleanEnv(process.env, {
   GITHUB_APP_ID: str(),
   GITHUB_PRIVATE_KEY: str(),
   SMEE_URL: str(),
+  GREPTILE_API_KEY: str(),
+  GITHUB_TOKEN: str(),
 });

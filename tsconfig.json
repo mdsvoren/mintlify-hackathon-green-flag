@@ -2,6 +2,8 @@
   "extends": "@tsconfig/recommended",
   "compilerOptions": {
     "module": "NodeNext",
-    "outDir": "dist"
+    "outDir": "dist",
+    "moduleResolution": "node16",
+    "types": ["node"]
   }
 }
