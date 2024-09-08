@@ -1,5 +1,6 @@
 import { App, Octokit } from "octokit";
 import { env } from "./env.js";
+import { FileWithUpdatedContent } from "./types/file.js";
 
 export const githubApp = new App({
   appId: env.GITHUB_APP_ID,
@@ -42,4 +43,60 @@ export async function getBlob(
   }
 
   return Buffer.from(data.content, "base64").toString("utf-8");
+}
+
+export async function createPr(
+  octokit: Octokit,
+  owner: string,
+  repo: string,
+  changes: FileWithUpdatedContent[]
+) {
+  const message = "updates from green-flag";
+  const baseBranch = "main";
+  const branch = `green-flag/${crypto.randomUUID()}`;
+
+  const { data: baseRef } = await octokit.request(
+    "GET /repos/{owner}/{repo}/git/ref/{ref}",
+    {
+      owner,
+      repo,
+      ref: `heads/${baseBranch}`,
+    }
+  );
+
+  // Create a branch
+  await octokit.rest.git.createRef({
+    repo,
+    owner,
+    ref: `refs/heads/${branch}`,
+    sha: baseRef.object.sha,
+  });
+
+  for await (const { path, updatedContent } of changes) {
+    // update file
+    await octokit.request("PUT /repos/{owner}/{repo}/contents/{path}", {
+      repo,
+      owner,
+      path, // the path to file needed to be created
+      message, // a commit message
+      content: Buffer.from(updatedContent).toString("base64"), // the content of your file, must be base64 encoded
+      branch, // the branch name we used when creating a Git reference
+    });
+  }
+
+  // create a PR from that branch with the commit of our added file
+  const { data: pullRequestData } = await octokit.request(
+    "POST /repos/{owner}/{repo}/pulls",
+    {
+      owner,
+      repo,
+      title: "New PR with terraform config file!", // the title of the PR
+      head: branch, // the branch our changes are on
+      base: baseBranch, // the branch to which you want to merge your changes
+      body: message, // the body of your PR
+      maintainer_can_modify: true, // allows maintainers to edit your app's PR
+    }
+  );
+
+  return pullRequestData.html_url;
 }

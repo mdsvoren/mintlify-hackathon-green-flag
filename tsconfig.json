@@ -2,8 +2,8 @@
   "extends": "@tsconfig/recommended",
   "compilerOptions": {
     "module": "NodeNext",
+    "target": "ES2023",
     "outDir": "dist",
-    "moduleResolution": "node16",
     "types": ["node"]
   }
 }
