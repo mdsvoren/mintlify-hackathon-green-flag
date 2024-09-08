@@ -1,304 +1,424 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Software Launch Timeline</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f4f8;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
-        }
-        h1, h2 {
-            font-family: 'Playfair Display', serif;
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(to bottom, #1a4731, #064e3b, #fbbf24);
-            transform: translateX(-50%);
-        }
-        .timeline-item {
-            margin-bottom: 100vh;
-        }
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-        }
-        .card-gradient-1 {
-            background: linear-gradient(135deg, #ecfdf5 70%, #064e3b);
-        }
-        .card-gradient-2 {
-            background: linear-gradient(315deg, #fef3c7 70%, #d97706);
-        }
-        .card-gradient-3 {
-            background: linear-gradient(135deg, #ecfdf5 70%, #064e3b);
-        }
-        .card-gradient-4 {
-            background: linear-gradient(315deg, #fef3c7 70%, #d97706);
-        }
-        .card-gradient-5 {
-            background: linear-gradient(135deg, #ecfdf5 70%, #064e3b);
-        }
-        .timeline-card {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        .timeline-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .timeline-card h2 {
-            transition: all 0.3s ease;
-        }
-        .timeline-card:hover h2 {
-            transform: scale(1.05);
-        }
-        .card-gradient-1:hover h2, .card-gradient-3:hover h2, .card-gradient-5:hover h2 {
-            color: #fbbf24;
-        }
-        .card-gradient-2:hover h2, .card-gradient-4:hover h2 {
-            color: #064e3b;
-        }
-        .fashion-illustration {
-            position: fixed;
-            opacity: 0.1;
-            z-index: -1;
-        }
-        #illustration1 {
-            top: 10%;
-            left: 5%;
-            width: 200px;
-            height: 300px;
-        }
-        #illustration2 {
-            bottom: 10%;
-            right: 5%;
-            width: 250px;
-            height: 350px;
-        }
-        .timeline-label {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #064e3b;
-            color: #fbbf24;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .text-input {
-            width: calc(100% - 100px); /* Adjust width to make room for the button */
-            padding: 8px;
-            margin-top: 10px;
-            border: 1px solid #d1d5db;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .submit-button {
-            width: 90px;
-            padding: 8px;
-            margin-top: 10px;
-            margin-left: 10px;
-            background-color: #064e3b;
-            color: #fbbf24;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .submit-button:hover {
-            background-color: #065f46;
-        }
-        .font-poppins {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.025em;
-        }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f0f4f8;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+      }
+      h1,
+      h2 {
+        font-family: "Playfair Display", serif;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(to bottom, #1a4731, #064e3b, #fbbf24);
+        transform: translateX(-50%);
+      }
+      .timeline-item {
+        margin-bottom: 100vh;
+      }
+      #particles-js {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+      .card-gradient-1 {
+        background: linear-gradient(135deg, #ecfdf5 70%, #064e3b);
+      }
+      .card-gradient-2 {
+        background: linear-gradient(315deg, #fef3c7 70%, #d97706);
+      }
+      .card-gradient-3 {
+        background: linear-gradient(135deg, #ecfdf5 70%, #064e3b);
+      }
+      .card-gradient-4 {
+        background: linear-gradient(315deg, #fef3c7 70%, #d97706);
+      }
+      .card-gradient-5 {
+        background: linear-gradient(135deg, #ecfdf5 70%, #064e3b);
+      }
+      .timeline-card {
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+      .timeline-card:hover {
+        transform: translateY(-5px);
+        box-shadow:
+          0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .timeline-card h2 {
+        transition: all 0.3s ease;
+      }
+      .timeline-card:hover h2 {
+        transform: scale(1.05);
+      }
+      .card-gradient-1:hover h2,
+      .card-gradient-3:hover h2,
+      .card-gradient-5:hover h2 {
+        color: #fbbf24;
+      }
+      .card-gradient-2:hover h2,
+      .card-gradient-4:hover h2 {
+        color: #064e3b;
+      }
+      .fashion-illustration {
+        position: fixed;
+        opacity: 0.1;
+        z-index: -1;
+      }
+      #illustration1 {
+        top: 10%;
+        left: 5%;
+        width: 200px;
+        height: 300px;
+      }
+      #illustration2 {
+        bottom: 10%;
+        right: 5%;
+        width: 250px;
+        height: 350px;
+      }
+      .timeline-label {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #064e3b;
+        color: #fbbf24;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .text-input {
+        width: calc(
+          100% - 100px
+        ); /* Adjust width to make room for the button */
+        padding: 8px;
+        margin-top: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      .submit-button {
+        width: 90px;
+        padding: 8px;
+        margin-top: 10px;
+        margin-left: 10px;
+        background-color: #064e3b;
+        color: #fbbf24;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .submit-button:hover {
+        background-color: #065f46;
+      }
+      .font-poppins {
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.025em;
+      }
     </style>
-</head>
-<body class="bg-gray-100">
+  </head>
+  <body class="bg-gray-100">
     <div id="particles-js"></div>
-    <svg class="fashion-illustration" id="illustration1" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 10 Q60 50 50 90 Q40 50 50 10" stroke="#fbbf24" fill="none" stroke-width="0.5"/>
-        <path d="M30 40 Q50 60 70 40" stroke="#fbbf24" fill="none" stroke-width="0.5"/>
-        <circle cx="50" cy="20" r="5" stroke="#fbbf24" fill="none" stroke-width="0.5"/>
+    <svg
+      class="fashion-illustration"
+      id="illustration1"
+      viewBox="0 0 100 150"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M50 10 Q60 50 50 90 Q40 50 50 10"
+        stroke="#fbbf24"
+        fill="none"
+        stroke-width="0.5"
+      />
+      <path
+        d="M30 40 Q50 60 70 40"
+        stroke="#fbbf24"
+        fill="none"
+        stroke-width="0.5"
+      />
+      <circle
+        cx="50"
+        cy="20"
+        r="5"
+        stroke="#fbbf24"
+        fill="none"
+        stroke-width="0.5"
+      />
     </svg>
-    <svg class="fashion-illustration" id="illustration2" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 20 Q50 10 80 20 Q50 150 20 20" stroke="#fbbf24" fill="none" stroke-width="0.5"/>
-        <path d="M40 50 H60" stroke="#fbbf24" fill="none" stroke-width="0.5"/>
-        <circle cx="50" cy="30" r="10" stroke="#fbbf24" fill="none" stroke-width="0.5"/>
+    <svg
+      class="fashion-illustration"
+      id="illustration2"
+      viewBox="0 0 100 150"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M20 20 Q50 10 80 20 Q50 150 20 20"
+        stroke="#fbbf24"
+        fill="none"
+        stroke-width="0.5"
+      />
+      <path d="M40 50 H60" stroke="#fbbf24" fill="none" stroke-width="0.5" />
+      <circle
+        cx="50"
+        cy="30"
+        r="10"
+        stroke="#fbbf24"
+        fill="none"
+        stroke-width="0.5"
+      />
     </svg>
     <div class="container mx-auto px-4 py-16 relative">
-        <h1 class="text-6xl font-bold text-center mb-16 text-gray-800 tracking-wide" data-aos="fade-down" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">Software Launch Timeline</h1>
-        <div class="timeline relative">
-            <div class="timeline-item" data-aos="fade-right">
-                <div class="timeline-label">T-3 months</div>
-                <div class="card-gradient-1 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card">
-                    <h2 class="text-3xl font-semibold mb-3">Codebase created</h2>
-                    <p>The beginning of our journey</p>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-left">
-                <div class="timeline-label">T-2 months</div>
-                <div class="card-gradient-2 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card">
-                    <h2 class="text-3xl font-semibold mb-3">Features added</h2>
-                    <p>Mostly TODOs at this point</p>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-right">
-                <div class="timeline-label">T-1 month</div>
-                <div class="card-gradient-3 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card">
-                    <h2 class="text-3xl font-semibold mb-3">Feature flags added</h2>
-                    <p>Preparing for launch</p>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-left">
-                <div class="timeline-label">Launch!</div>
-                <div class="card-gradient-4 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card">
-                    <h2 class="text-3xl font-semibold mb-3">The big day</h2>
-                    <p>Our product goes live</p>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-right">
-                <div class="timeline-label">T+2 months</div>
-                <div class="card-gradient-5 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card">
-                    <h2 class="text-3xl font-semibold mb-3">Prod incident</h2>
-                    <p>Due to feature flags</p>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-left">
-                <div class="timeline-label">T+4 months</div>
-                <div class="card-gradient-2 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card">
-                    <h2 class="text-3xl font-semibold mb-3">Tech debt piling up</h2>
-                    <p>Dormant TODOs and unused feature flags</p>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-right">
-                <div class="timeline-label">Today</div>
-                <div class="card-gradient-1 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card">
-                    <h2 class="text-3xl font-semibold mb-3">Green Flag introduces automation</h2>
-                    <p>Automated feature flag management</p>
-                    <div class="flex mt-4 space-x-4">
-                        <a href="https://github.com" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 font-poppins">
-                            View messy codebase
-                        </a>
-                        <button id="removeStaleFlags" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 font-poppins">
-                            Remove Stale Feature Flags
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-left">
-                <div class="timeline-label">Still Today!</div>
-                <div class="card-gradient-2 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card">
-                    <h2 class="text-3xl font-semibold mb-3">One More Thing</h2>
-                    <p>Automate any periodic code cleanup task</p>
-                    <div class="flex">
-                        <input type="text" id="nextFeatureFlag" class="text-input" placeholder="What do you want cleaned up?">
-                        <button id="submitFeatureFlag" class="submit-button">Submit</button>
-                    </div>
-                </div>
-            </div>
+      <h1
+        class="text-6xl font-bold text-center mb-16 text-gray-800 tracking-wide"
+        data-aos="fade-down"
+        style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1)"
+      >
+        Software Launch Timeline
+      </h1>
+      <div class="timeline relative">
+        <div class="timeline-item" data-aos="fade-right">
+          <div class="timeline-label">T-3 months</div>
+          <div
+            class="card-gradient-1 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card"
+          >
+            <h2 class="text-3xl font-semibold mb-3">Codebase created</h2>
+            <p>The beginning of our journey</p>
+          </div>
         </div>
+        <div class="timeline-item" data-aos="fade-left">
+          <div class="timeline-label">T-2 months</div>
+          <div
+            class="card-gradient-2 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card"
+          >
+            <h2 class="text-3xl font-semibold mb-3">Features added</h2>
+            <p>Mostly TODOs at this point</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-right">
+          <div class="timeline-label">T-1 month</div>
+          <div
+            class="card-gradient-3 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card"
+          >
+            <h2 class="text-3xl font-semibold mb-3">Feature flags added</h2>
+            <p>Preparing for launch</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-left">
+          <div class="timeline-label">Launch!</div>
+          <div
+            class="card-gradient-4 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card"
+          >
+            <h2 class="text-3xl font-semibold mb-3">The big day</h2>
+            <p>Our product goes live</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-right">
+          <div class="timeline-label">T+2 months</div>
+          <div
+            class="card-gradient-5 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card"
+          >
+            <h2 class="text-3xl font-semibold mb-3">Prod incident</h2>
+            <p>Due to feature flags</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-left">
+          <div class="timeline-label">T+4 months</div>
+          <div
+            class="card-gradient-2 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card"
+          >
+            <h2 class="text-3xl font-semibold mb-3">Tech debt piling up</h2>
+            <p>Dormant TODOs and unused feature flags</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-right">
+          <div class="timeline-label">Today</div>
+          <div
+            class="card-gradient-1 text-gray-800 p-6 rounded-lg shadow-lg max-w-md ml-auto mr-8 timeline-card"
+          >
+            <h2 class="text-3xl font-semibold mb-3">
+              Green Flag introduces automation
+            </h2>
+            <p>Automated feature flag management</p>
+            <div class="flex mt-4 space-x-4">
+              <a
+                href="https://github.com"
+                target="_blank"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 font-poppins"
+              >
+                View messy codebase
+              </a>
+              <button
+                id="removeStaleFlags"
+                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 font-poppins"
+              >
+                Remove Stale Feature Flags
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-left">
+          <div class="timeline-label">Still Today!</div>
+          <div
+            class="card-gradient-2 text-gray-800 p-6 rounded-lg shadow-lg max-w-md mr-auto ml-8 timeline-card"
+          >
+            <h2 class="text-3xl font-semibold mb-3">One More Thing</h2>
+            <p>Automate any periodic code cleanup task</p>
+            <div class="flex">
+              <input
+                type="text"
+                id="nextFeatureFlag"
+                class="text-input"
+                placeholder="What do you want cleaned up?"
+              />
+              <button id="submitFeatureFlag" class="submit-button">
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
-        });
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100,
+      });
 
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#fbbf24" },
-                shape: { type: "circle" },
-                opacity: { value: 0.5, random: false },
-                size: { value: 3, random: true },
-                line_linked: { enable: true, distance: 150, color: "#064e3b", opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 2, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
-                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
-            },
-            retina_detect: true
-        });
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#fbbf24" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: false },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#064e3b",
+            opacity: 0.4,
+            width: 1,
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: "none",
+            random: false,
+            straight: false,
+            out_mode: "out",
+            bounce: false,
+          },
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: { enable: true, mode: "repulse" },
+            onclick: { enable: true, mode: "push" },
+            resize: true,
+          },
+          modes: {
+            repulse: { distance: 100, duration: 0.4 },
+            push: { particles_nb: 4 },
+          },
+        },
+        retina_detect: true,
+      });
 
-        // New JavaScript for keyboard navigation
-        document.addEventListener('keydown', function(event) {
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            let currentIndex = -1;
+      // New JavaScript for keyboard navigation
+      document.addEventListener("keydown", function (event) {
+        const timelineItems = document.querySelectorAll(".timeline-item");
+        let currentIndex = -1;
 
-            // Find the current visible timeline item
-            for (let i = 0; i < timelineItems.length; i++) {
-                const rect = timelineItems[i].getBoundingClientRect();
-                if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
-                    currentIndex = i;
-                    break;
-                }
-            }
-
-            if (event.key === 'ArrowDown' && currentIndex < timelineItems.length - 1) {
-                event.preventDefault();
-                scrollToElement(timelineItems[currentIndex + 1]);
-            } else if (event.key === 'ArrowUp' && currentIndex > 0) {
-                event.preventDefault();
-                scrollToElement(timelineItems[currentIndex - 1]);
-            }
-        });
-
-        function scrollToElement(element) {
-            const offset = 100; // Adjust this value to increase or decrease the space from the top
-            const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth"
-            });
+        // Find the current visible timeline item
+        for (let i = 0; i < timelineItems.length; i++) {
+          const rect = timelineItems[i].getBoundingClientRect();
+          if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
+            currentIndex = i;
+            break;
+          }
         }
 
-        // Function to handle feature flag submission
-        function submitFeatureFlag() {
-            const input = document.getElementById('nextFeatureFlag');
-            const featureFlag = input.value.trim();
-            if (featureFlag) {
-                console.log('New feature flag:', featureFlag);
-                input.value = ''; // Clear the input field
-            }
+        if (
+          event.key === "ArrowDown" &&
+          currentIndex < timelineItems.length - 1
+        ) {
+          event.preventDefault();
+          scrollToElement(timelineItems[currentIndex + 1]);
+        } else if (event.key === "ArrowUp" && currentIndex > 0) {
+          event.preventDefault();
+          scrollToElement(timelineItems[currentIndex - 1]);
         }
+      });
 
-        // Add functionality for the new input field and submit button
-        document.getElementById('nextFeatureFlag').addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                submitFeatureFlag();
-            }
+      function scrollToElement(element) {
+        const offset = 100; // Adjust this value to increase or decrease the space from the top
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+
+      // Function to handle feature flag submission
+      function submitFeatureFlag() {
+        const input = document.getElementById("nextFeatureFlag");
+        const featureFlag = input.value.trim();
+        if (featureFlag) {
+          console.log("New feature flag:", featureFlag);
+          input.value = ""; // Clear the input field
+        }
+      }
+
+      // Add functionality for the new input field and submit button
+      document
+        .getElementById("nextFeatureFlag")
+        .addEventListener("keyup", function (event) {
+          if (event.key === "Enter") {
+            submitFeatureFlag();
+          }
         });
 
-        document.getElementById('submitFeatureFlag').addEventListener('click', submitFeatureFlag);
+      document
+        .getElementById("submitFeatureFlag")
+        .addEventListener("click", submitFeatureFlag);
 
-        // Add functionality for the "Remove Stale Feature Flags" button
-        document.getElementById('removeStaleFlags').addEventListener('click', function() {
-            console.log('Removing stale feature flags...');
+      // Add functionality for the "Remove Stale Feature Flags" button
+      document
+        .getElementById("removeStaleFlags")
+        .addEventListener("click", function () {
+          console.log("Removing stale feature flags...");
         });
     </script>
-</body>
+  </body>
 </html>

@@ -16,6 +16,8 @@ export async function analyzeFeatureFlags(
   branch: string,
   owner: string
 ) {
+  let fileWithRanges: FileWithRange[] = [];
+
   try {
     // Fetch feature flags
     const featureFlags: FeatureFlag[] = await fetchFeatureFlags(
@@ -81,7 +83,7 @@ export async function analyzeFeatureFlags(
       fileContentMap.set(flag.file_path, content);
     }
 
-    const fileWithRanges: FileWithRange[] = staleFeatureFlags.map((flag) => ({
+    fileWithRanges = staleFeatureFlags.map((flag) => ({
       path: flag.file_path,
       content: fileContentMap.get(flag.file_path) ?? "",
       range: {
@@ -90,9 +92,27 @@ export async function analyzeFeatureFlags(
       },
     }));
 
-    console.log(
-      `Number of FileWithRange objects created: ${fileWithRanges.length}`
-    );
+    // Append usage data to fileWithRanges
+    for (const flag of staleFeatureFlags) {
+      if (flag.usages) {
+        for (const usage of flag.usages) {
+          const content = await getBlob(
+            octokit,
+            owner,
+            repository,
+            usage.file_path
+          );
+          fileWithRanges.push({
+            path: usage.file_path,
+            content: content,
+            range: {
+              start: usage.line_start,
+              end: usage.line_end,
+            },
+          });
+        }
+      }
+    }
 
     return fileWithRanges;
   } catch (error) {
