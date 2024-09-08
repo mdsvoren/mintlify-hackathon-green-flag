@@ -11,8 +11,8 @@ class ClaudeSonnetClient {
     });
   }
 
-  async invokeModelWithCode(code: string): Promise<void> {
-    const prompt = this.createPrompt(code);
+  async invokeModelWithCode(files: FileWithRange[]): Promise<void> {
+    const prompt = this.createPrompt(files);
 
     try {
       const message = await this.client.messages.create({
