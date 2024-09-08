@@ -2,6 +2,7 @@ import express from "express";
 import { githubApp } from "./github-app.js";
 import { Octokit } from 'octokit';
 import { env } from "./env.js";
+import { ClaudeSonnetClient } from "./anthropic-client.js";
 
 const app = express();
 
@@ -24,3 +25,4 @@ app.listen(3000);
 
 // Create Octokit client
 const octokit = new Octokit({ auth: env.GITHUB_TOKEN });
+const anthropicClient = new ClaudeSonnetClient();

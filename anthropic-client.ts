@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { env } from "./env.js";
 import { FileWithRange } from './types/file.js';
 
-class ClaudeSonnetClient {
+export class ClaudeSonnetClient {
   private client: Anthropic;
 
   constructor(apiKey: string = env.ANTHROPIC_API_KEY) {
