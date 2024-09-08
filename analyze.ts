@@ -3,6 +3,7 @@ import { getSnippetChangeDate } from "./blame.js";
 import { Octokit } from "octokit";
 import { FileWithRange } from "./types/file.js";
 import { ClaudeSonnetClient } from "./anthropic-client.js";
+import { getBlob, getOctokit } from "./github-app.js";
 
 export async function analyzeFeatureFlags(
   octokit: Octokit,
@@ -48,9 +49,16 @@ export async function analyzeFeatureFlags(
       `Number of feature flags newer than 2 months: ${recentFeatureFlags.length}`
     );
 
+    const fileContentMap = new Map<string, string>();
+    
+    for (const flag of recentFeatureFlags) {
+      const content = await getBlob(octokit, owner, repository, flag.file_path);
+      fileContentMap.set(flag.file_path, content);
+    }
+
     const fileWithRanges: FileWithRange[] = recentFeatureFlags.map((flag) => ({
       path: flag.file_path,
-      content: "", // TODO - implement
+      content: fileContentMap.get(flag.file_path) ?? "",
       range: {
         start: flag.line_start || 0,
         end: flag.line_end || 0,
