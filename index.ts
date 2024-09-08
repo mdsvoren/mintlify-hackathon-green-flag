@@ -30,4 +30,4 @@ createServer(async (req, res) => {
 new SmeeClient({
   source: env.SMEE_URL,
   target: 'http://localhost:3000/webhooks',
-});
+}).start();
