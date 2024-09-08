@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { createPr, getOctokit } from "./github-app.js";
 import { ClaudeSonnetClient } from "./anthropic-client.js";
 import { fetchRelevantCode, indexRepository } from "./greptile.js";
@@ -29,6 +30,15 @@ webhooks.on("push", async (event) => {
 });
 
 const app = express();
+// Add CORS middleware
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.post("/check/:owner/:repo", async function (req, res) {
