@@ -74,11 +74,9 @@ export async function analyzeFeatureFlags(
       `Number of FileWithRange objects created: ${fileWithRanges.length}`
     );
 
-    await anthropicClient.invokeModelWithCode(fileWithRanges); // TODO - handle the response
-
-    // You can now use recentFeatureFlags for further processing or return it
-    return recentFeatureFlags;
+    return fileWithRanges;
   } catch (error) {
     console.error("Error analyzing feature flags:", error);
+    return [];
   }
 }
