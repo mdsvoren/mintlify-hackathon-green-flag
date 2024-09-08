@@ -6,3 +6,8 @@ export type FileWithRange = {
     end: number;
   };
 };
+
+export type FileWithUpdatedContent = {
+  path: string;
+  updatedContent: string;
+};
