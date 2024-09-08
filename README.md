@@ -1,0 +1,1 @@
+# mintlify-hackathon-green-flag
