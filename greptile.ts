@@ -9,10 +9,19 @@ if (!greptile_api_key || !github_token) {
 
 export interface FeatureFlag {
   file_path: string;
-  line_start: number;
-  line_end: number;
+  line_start: number; // line number where the feature flag is defined
+  line_end: number; // line number where the feature flag is defined
   feature_flag_name: string;
   change_date: Date | null;
+  usages: FeatureFlagUsage[] | null;
+}
+
+export interface FeatureFlagUsage {
+  file_path: string;
+  line_start: number; // line number where the feature flag is used
+  line_end: number; // line number where the feature flag is used
+  feature_flag_name: string;
+  snippet: string;
 }
 
 // HACK: This function assumes the repository has been indexed by Greptile
@@ -100,11 +109,20 @@ export const fetchFeatureFlagUsage = async (
         "X-API-Key": greptile_api_key,
       },
       body: JSON.stringify({
-        github_token: github_token,
-        owner: owner,
-        repository: repository,
-        branch: branch,
-        query: featureFlags.map((flag) => flag.feature_flag_name).join(" OR "),
+        messages: [
+          {
+            id: "123456",
+            content: `Find all occurrences of the following feature flags: ${featureFlags.map((flag) => flag.feature_flag_name).join(", ")}. For each occurrence, provide a structured JSON object with the file_path, line_start, line_end, feature_flag_name, and the surrounding code snippet. Ignore any occurrences in the files where the feature flags are defined (${featureFlags.map((flag) => flag.file_path).join(", ")}), as these are just definitions and we're interested in actual usage. The output must be a valid JSON array in the following format: [{"file_path": "path/to/file.js", "line_start": 40, "line_end": 45, "feature_flag_name": "FEATURE_FLAG_NAME", "snippet": "if (FEATURE_FLAG_NAME) { ... }"}]. Ensure that each object in the array represents a single occurrence of a feature flag. Your response must contain an object we can load with JSON.parse(), without any additional text, formatting, or code blocks.`,
+            role: "user",
+          },
+        ],
+        repositories: [
+          {
+            remote: "github",
+            branch,
+            repository: `${owner}/${repository}`,
+          },
+        ],
       }),
     });
 
@@ -114,7 +132,16 @@ export const fetchFeatureFlagUsage = async (
     }
 
     const responseData = await response.json();
-    const featureFlagUsageData = JSON.parse(responseData.message);
+    const featureFlagUsageData: FeatureFlagUsage[] = JSON.parse(
+      responseData.message
+    ).map((usage: any) => ({
+      file_path: usage.file_path.substring(1),
+      line_start: usage.line_start,
+      line_end: usage.line_end,
+      feature_flag_name: usage.feature_flag_name,
+      snippet: usage.snippet,
+    }));
+
     console.log(featureFlagUsageData);
 
     return featureFlagUsageData;

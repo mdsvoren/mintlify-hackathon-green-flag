@@ -58,6 +58,22 @@ export async function analyzeFeatureFlags(
       `Number of feature flags older than 2 months: ${staleFeatureFlags.length}`
     );
 
+    // Fetch feature flag usage for stale feature flags
+    const featureFlagUsage = await fetchFeatureFlagUsage(
+      owner,
+      repository,
+      branch,
+      staleFeatureFlags
+    );
+
+    // You might want to associate usage with each stale feature flag here
+    // For example:
+    staleFeatureFlags.forEach((flag) => {
+      flag.usages = featureFlagUsage.filter(
+        (usage) => usage.feature_flag_name === flag.feature_flag_name
+      );
+    });
+
     const fileContentMap = new Map<string, string>();
 
     for (const flag of staleFeatureFlags) {
