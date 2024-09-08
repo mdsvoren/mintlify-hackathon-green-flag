@@ -72,6 +72,7 @@ export class ClaudeSonnetClient {
       The updated content should be a string containing the original content with the feature flag and its dependent code removed.
       Don't include any other text or formatting.
       Don't modify file content unrelated to the feature flag.
+      Don't remove any underlying feature flag services/classes/methods/providers etc.
       Make sure to consider the dependencies between files when removing the feature flag.
 
       The output should be an array of objects with the following shape:
