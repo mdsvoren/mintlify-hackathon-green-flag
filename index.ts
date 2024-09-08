@@ -63,7 +63,9 @@ app.post("/lint/:owner/:repo", async function (req, res) {
 
     const rule = await anthropicClient.getStructuredLintRule(query);
 
-    console.log(`Analyzing ${owner}/${repo} with rule: ${JSON.stringify(rule, null, 2)}`);
+    console.log(
+      `Analyzing ${owner}/${repo} with rule: ${JSON.stringify(rule, null, 2)}`
+    );
 
     const fileWithRanges = await analyzeWithLintRule(
       octokit,
@@ -73,7 +75,10 @@ app.post("/lint/:owner/:repo", async function (req, res) {
       rule
     );
 
-    const changedFiles = await anthropicClient.invokeModelWithLintRule(fileWithRanges, rule);
+    const changedFiles = await anthropicClient.invokeModelWithLintRule(
+      fileWithRanges,
+      rule
+    );
     const prUrl = await createPr(octokit, owner, repo, changedFiles);
     console.log(`Created PR: ${prUrl}`);
   } catch (e) {
@@ -85,7 +90,6 @@ app.post("/lint/:owner/:repo", async function (req, res) {
 app.use(createNodeMiddleware(webhooks, { path: "/webhook" }));
 
 app.listen(3000);
-
 
 new SmeeClient({
   source: env.SMEE_URL,

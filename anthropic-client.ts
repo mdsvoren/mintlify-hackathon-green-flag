@@ -1,15 +1,11 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { env } from "./env.js";
-<<<<<<< Updated upstream
 import {
   FileWithRangeAndDescription,
   FileWithUpdatedContent,
 } from "./types/file.js";
-=======
-import { FileWithRange, FileWithUpdatedContent } from "./types/file.js";
 import { isLintRule, LintRule } from "./types/lintRule.js";
 import { ContentBlock } from "@anthropic-ai/sdk/resources/index.mjs";
->>>>>>> Stashed changes
 
 export class ClaudeSonnetClient {
   private client: Anthropic;
@@ -129,7 +125,7 @@ Only return the JSON response as your output, nothing else.
   }
 
   async invokeModelWithLintRule(
-    files: FileWithRange[],
+    files: FileWithRangeAndDescription[],
     rule: LintRule
   ): Promise<FileWithUpdatedContent[]> {
     const prompt = `

@@ -68,7 +68,9 @@ export const fetchRelevantCode = async (
     }
 
     const responseData = await response.json();
-    console.log(`Relevant code response: ${JSON.stringify(responseData, null, 2)}`);
+    console.log(
+      `Relevant code response: ${JSON.stringify(responseData, null, 2)}`
+    );
     const relevantCodeData = JSON.parse(responseData.message);
     return relevantCodeData as RelevantCode[];
   } catch (err) {

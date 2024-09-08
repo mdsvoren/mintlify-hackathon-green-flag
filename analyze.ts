@@ -130,7 +130,7 @@ export const analyzeWithLintRule = async (
   owner: string,
   repository: string,
   branch: string,
-  rule: LintRule,
+  rule: LintRule
 ) => {
   const relevantCode = await fetchRelevantCode(
     owner,
@@ -138,7 +138,6 @@ export const analyzeWithLintRule = async (
     branch,
     rule.targetQuery
   );
-  
 
   const fileContentMap = new Map<string, string>();
 
@@ -147,14 +146,16 @@ export const analyzeWithLintRule = async (
     fileContentMap.set(code.file_path, content);
   }
 
-  const fileWithRanges: FileWithRange[] = relevantCode.map((code) => ({
-    path: code.file_path,
-    content: fileContentMap.get(code.file_path) ?? "",
-    range: {
-      start: code.line_start,
-      end: code.line_end,
-    },
-  }));
+  const fileWithRanges: FileWithRangeAndDescription[] = relevantCode.map(
+    (code) => ({
+      path: code.file_path,
+      content: fileContentMap.get(code.file_path) ?? "",
+      range: {
+        start: code.line_start,
+        end: code.line_end,
+      },
+    })
+  );
 
   return fileWithRanges;
-}
+};
