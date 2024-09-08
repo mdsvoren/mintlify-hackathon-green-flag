@@ -90,7 +90,7 @@ export async function createPr(
     {
       owner,
       repo,
-      title: "New PR with terraform config file!", // the title of the PR
+      title: "chore: clean up stale feature flags", // the title of the PR
       head: branch, // the branch our changes are on
       base: baseBranch, // the branch to which you want to merge your changes
       body: message, // the body of your PR
