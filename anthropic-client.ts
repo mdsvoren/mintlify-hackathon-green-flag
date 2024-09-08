@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { env } from "./env.js";
+import { FileWithRange } from './types/file.js';
 
 class ClaudeSonnetClient {
   private client: Anthropic;
@@ -26,7 +27,21 @@ class ClaudeSonnetClient {
     }
   }
 
-  private createPrompt(code: string): string {
-    return `Here is some code:\n\n${code}\n\nPlease provide any useful feedback, insights, or improvements.`;
+  private createPrompt(files: FileWithRange[]): string {
+    return `
+      The following are some files and ranges within each. They correspond to feature flags that should be removed.
+      Please provide the updated content for each file in JSON format. e.g.:
+      {
+        "file_path": "path/to/file.ts",
+        "updated_content": "updated content"
+      }
+
+      ${files.map(file => `
+        File: ${file.path}
+        Range: ${file.range.start}-${file.range.end}
+        Content:
+        ${file.content}
+      `).join('\n\n')}
+    `;
   }
 }
