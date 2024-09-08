@@ -1,4 +1,11 @@
-export const fetchFeatureFlags = async (repository: string, branch: string): Promise<Array<{ filepath: string; linestart: number; lineend: number }>> => {
+export interface FeatureFlag {
+    file_path: string;
+    line_start: number;
+    line_end: number;
+    change_date: Date | null;
+}
+
+export const fetchFeatureFlags = async (repository: string, branch: string): Promise<FeatureFlag[]> => {
     const greptile_api_key = process.env.GREPTILE_API_KEY;
     const github_token = process.env.GITHUB_TOKEN;
 
@@ -30,9 +37,9 @@ export const fetchFeatureFlags = async (repository: string, branch: string): Pro
 
         const featureFlagsData = await response.json();
         return featureFlagsData.map(({ filepath, linestart, lineend }: { filepath: string; linestart: number; lineend: number }) => ({
-            filepath,
-            linestart,
-            lineend
+            file_path: filepath,
+            line_start: linestart,
+            line_end: lineend
         }));
     } catch (error) {
         console.error('Error fetching feature flags:', error);

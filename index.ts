@@ -1,5 +1,7 @@
 import express from "express";
 import { githubApp } from "./github-app.js";
+import { Octokit } from 'octokit';
+import { env } from "./env.js";
 
 const app = express();
 
@@ -19,3 +21,6 @@ app.post('/check/:owner/:repo', async function (req, res) {
 });
 
 app.listen(3000);
+
+// Create Octokit client
+const octokit = new Octokit({ auth: env.GITHUB_TOKEN });
