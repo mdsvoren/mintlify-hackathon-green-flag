@@ -25,7 +25,7 @@ export async function getSnippetChangeDate({
   filePath: String;
   startLine: Number;
   endLine: Number;
-}) {
+}): Promise<String> {
   const result = (await client.graphql(
     `{
     repository(name:"${repo}", owner:"${owner}") {
