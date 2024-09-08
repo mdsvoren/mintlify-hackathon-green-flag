@@ -25,7 +25,7 @@ export async function getSnippetChangeDate({
   filePath: String;
   startLine: Number;
   endLine: Number;
-}): Promise<String> {
+}): Promise<Number> {
   const result = (await client.graphql(
     `{
     repository(name:"${repo}", owner:"${owner}") {
@@ -66,5 +66,5 @@ export async function getSnippetChangeDate({
     throw new Error("No change dates found");
   }
 
-  return changeDates[changeDates.length - 1];
+  return Date.parse(changeDates[changeDates.length - 1]);
 }
