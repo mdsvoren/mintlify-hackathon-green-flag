@@ -10,4 +10,5 @@ export const env = cleanEnv(process.env, {
   SMEE_URL: str(),
   GREPTILE_API_KEY: str(),
   GITHUB_TOKEN: str(),
+  ANTHROPIC_API_KEY: str(),
 });

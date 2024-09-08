@@ -1,9 +1,10 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { env } from "./env.js";
 
 class ClaudeSonnetClient {
   private client: Anthropic;
 
-  constructor(apiKey: string = process.env['ANTHROPIC_API_KEY'] || '') {
+  constructor(apiKey: string = env.ANTHROPIC_API_KEY) {
     this.client = new Anthropic({
       apiKey: apiKey,
     });
