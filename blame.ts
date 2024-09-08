@@ -49,7 +49,7 @@ export async function getSnippetChangeDate({
         }
       }
     }
-  }`,
+  }`
   )) as any;
 
   const changeDates = result.repository.ref.target.blame.ranges
@@ -57,8 +57,7 @@ export async function getSnippetChangeDate({
       (blameRange: BlameRange) =>
         (blameRange.startingLine <= startLine &&
           blameRange.endingLine >= startLine) ||
-        (blameRange.startingLine <= endLine &&
-          blameRange.endingLine >= endLine),
+        (blameRange.startingLine <= endLine && blameRange.endingLine >= endLine)
     )
     .map((blameRange: BlameRange) => blameRange.commit.authoredDate)
     .sort();

@@ -1,12 +1,12 @@
 import express from "express";
 import { getOctokit, githubApp } from "./github-app.js";
-import { Octokit } from 'octokit';
+import { Octokit } from "octokit";
 import { env } from "./env.js";
 import { ClaudeSonnetClient } from "./anthropic-client.js";
 
 const app = express();
 
-app.post('/check/:owner/:repo', async function (req, res) {
+app.post("/check/:owner/:repo", async function (req, res) {
   try {
     const { owner, repo } = req.params;
     const octokit = await getOctokit(owner, repo);

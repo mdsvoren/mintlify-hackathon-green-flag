@@ -1,6 +1,6 @@
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from "@anthropic-ai/sdk";
 import { env } from "./env.js";
-import { FileWithRange, FileWithUpdatedContent } from './types/file.js';
+import { FileWithRange, FileWithUpdatedContent } from "./types/file.js";
 
 export class ClaudeSonnetClient {
   private client: Anthropic;
@@ -11,47 +11,56 @@ export class ClaudeSonnetClient {
     });
   }
 
-  async invokeModelWithCode(files: FileWithRange[]): Promise<FileWithUpdatedContent[]> {
+  async invokeModelWithCode(
+    files: FileWithRange[]
+  ): Promise<FileWithUpdatedContent[]> {
     const prompt = this.createPrompt(files);
 
     try {
       const message = await this.client.messages.create({
-        model: 'claude-3-5-sonnet-20240620',
+        model: "claude-3-5-sonnet-20240620",
         max_tokens: 8192,
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{ role: "user", content: prompt }],
       });
 
       // Parse the LLM output and coerce it into FileWithUpdatedContent[]
       const updatedFiles: FileWithUpdatedContent[] = message.content
-        .filter((block): block is { type: 'text'; text: string } => block.type === 'text')
+        .filter(
+          (block): block is { type: "text"; text: string } =>
+            block.type === "text"
+        )
         .flatMap((block) => {
           try {
             const parsed = JSON.parse(block.text);
             if (Array.isArray(parsed)) {
-              return parsed.filter((item): item is FileWithUpdatedContent => 
-                typeof item === 'object' && 
-                'path' in item && 
-                'updatedContent' in item &&
-                typeof item.path === 'string' &&
-                typeof item.updatedContent === 'string'
+              return parsed.filter(
+                (item): item is FileWithUpdatedContent =>
+                  typeof item === "object" &&
+                  "path" in item &&
+                  "updatedContent" in item &&
+                  typeof item.path === "string" &&
+                  typeof item.updatedContent === "string"
               );
-            } else if (typeof parsed === 'object' && parsed !== null) {
+            } else if (typeof parsed === "object" && parsed !== null) {
               const item = parsed as unknown;
-              if ('path' in parsed && 'updatedContent' in parsed &&
-                  typeof parsed.path === 'string' &&
-                  typeof parsed.updatedContent === 'string') {
+              if (
+                "path" in parsed &&
+                "updatedContent" in parsed &&
+                typeof parsed.path === "string" &&
+                typeof parsed.updatedContent === "string"
+              ) {
                 return [parsed as FileWithUpdatedContent];
               }
             }
           } catch (e) {
-            console.error('Error parsing LLM output:', e);
+            console.error("Error parsing LLM output:", e);
           }
           return [];
         });
 
       return updatedFiles;
     } catch (error) {
-      console.error('Error invoking Claude Sonnet 3.5:', error);
+      console.error("Error invoking Claude Sonnet 3.5:", error);
       return [];
     }
   }
@@ -72,12 +81,16 @@ export class ClaudeSonnetClient {
         "updatedContent": "updated content"
       }
 
-      ${files.map(file => `
+      ${files
+        .map(
+          (file) => `
         File: ${file.path}
         Range: ${file.range.start}-${file.range.end}
         Content:
         ${file.content}
-      `).join('\n\n')}
+      `
+        )
+        .join("\n\n")}
     `;
   }
 }
