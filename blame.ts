@@ -26,8 +26,6 @@ export async function getSnippetChangeDate({
   startLine: Number;
   endLine: Number;
 }): Promise<Number> {
-  // greptile returns slash in the beginning
-  filePath = filePath.substring(1);
   const result = (await client.graphql(
     `{
     repository(name:"${repo}", owner:"${owner}") {

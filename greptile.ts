@@ -9,7 +9,7 @@ export interface FeatureFlag {
 
 // HACK: This function assumes the repository has been indexed by Greptile
 export const fetchFeatureFlags = async (
-    owner: string,
+  owner: string,
   repository: string,
   branch: string
 ): Promise<FeatureFlag[]> => {
@@ -30,13 +30,12 @@ export const fetchFeatureFlags = async (
       },
       body: JSON.stringify({
         messages: [
-            
-                 {
-            "id": "123456",
-            "content": "Provide a structured JSON output with the filepath, linestart, and lineend of all areas that use feature flags. Provide only the JSON and nothing else. The output should be in the following format: [{\"filepath\": \"path/to/file\", \"linestart\": 10, \"lineend\": 15}, ...]",
-            "role": "user"
-        },
-            
+          {
+            id: "123456",
+            content:
+              'Provide a structured JSON output with the filepath, linestart, and lineend of all areas that use feature flags. Provide only the JSON and nothing else. The output should be in the following format: [{"filepath": "path/to/file", "linestart": 10, "lineend": 15}, ...]',
+            role: "user",
+          },
         ],
         repositories: [
           {
@@ -54,7 +53,9 @@ export const fetchFeatureFlags = async (
     }
 
     const responseData = await response.json();
-    const featureFlagsData = JSON.parse(responseData.message.match(/```json\n([\s\S]*?)\n```/)[1]);
+    const featureFlagsData = JSON.parse(
+      responseData.message.match(/```json\n([\s\S]*?)\n```/)[1]
+    );
     return featureFlagsData.map(
       ({
         filepath,
@@ -65,7 +66,7 @@ export const fetchFeatureFlags = async (
         linestart: number;
         lineend: number;
       }) => ({
-        file_path: filepath,
+        file_path: filepath.substring(1),
         line_start: linestart,
         line_end: lineend,
       })
