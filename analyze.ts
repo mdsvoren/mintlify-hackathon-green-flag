@@ -2,12 +2,14 @@ import {
   fetchFeatureFlags,
   FeatureFlag,
   fetchFeatureFlagUsage,
+  fetchRelevantCode,
 } from "./greptile.js";
 import { getSnippetChangeDate } from "./blame.js";
 import { Octokit } from "octokit";
 import { FileWithRangeAndDescription } from "./types/file.js";
 import { ClaudeSonnetClient } from "./anthropic-client.js";
 import { getBlob, getOctokit } from "./github-app.js";
+import { LintRule } from "./types/lintRule.js";
 
 export async function analyzeFeatureFlags(
   octokit: Octokit,
@@ -121,4 +123,38 @@ export async function analyzeFeatureFlags(
     console.error("Error analyzing feature flags:", error);
     return [];
   }
+}
+
+export const analyzeWithLintRule = async (
+  octokit: Octokit,
+  owner: string,
+  repository: string,
+  branch: string,
+  rule: LintRule,
+) => {
+  const relevantCode = await fetchRelevantCode(
+    owner,
+    repository,
+    branch,
+    rule.targetQuery
+  );
+  
+
+  const fileContentMap = new Map<string, string>();
+
+  for (const code of relevantCode) {
+    const content = await getBlob(octokit, owner, repository, code.file_path);
+    fileContentMap.set(code.file_path, content);
+  }
+
+  const fileWithRanges: FileWithRange[] = relevantCode.map((code) => ({
+    path: code.file_path,
+    content: fileContentMap.get(code.file_path) ?? "",
+    range: {
+      start: code.line_start,
+      end: code.line_end,
+    },
+  }));
+
+  return fileWithRanges;
 }

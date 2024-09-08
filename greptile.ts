@@ -24,6 +24,59 @@ export interface FeatureFlagUsage {
   snippet: string;
 }
 
+export interface RelevantCode {
+  file_path: string;
+  line_start: number;
+  line_end: number;
+}
+
+export const fetchRelevantCode = async (
+  owner: string,
+  repository: string,
+  branch: string,
+  query: string
+) => {
+  try {
+    const response = await fetch("https://api.greptile.com/v2/query", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${greptile_api_key}`,
+        "X-Github-Token": github_token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages: [
+          {
+            id: "123456",
+            content: `Find all the code in the repository that is relevant to the following query: ${query}. For each instance, provide a structured JSON object with the file_path, line_start, and line_end. Your response must contain an object we can load with JSON.parse(), without any additional text, formatting, or code blocks.`,
+            role: "user",
+          },
+        ],
+        repositories: [
+          {
+            remote: "github",
+            branch,
+            repository: `${owner}/${repository}`,
+          },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`HTTP error! response: ${await response.text()}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+    console.log(`Relevant code response: ${JSON.stringify(responseData, null, 2)}`);
+    const relevantCodeData = JSON.parse(responseData.message);
+    return relevantCodeData as RelevantCode[];
+  } catch (err) {
+    console.error("Error fetching relevant code:", err);
+    throw err;
+  }
+};
+
 // HACK: This function assumes the repository has been indexed by Greptile
 export const fetchFeatureFlags = async (
   owner: string,

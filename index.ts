@@ -1,8 +1,8 @@
 import express from "express";
 import { createPr, getOctokit } from "./github-app.js";
 import { ClaudeSonnetClient } from "./anthropic-client.js";
-import { indexRepository } from "./greptile.js";
-import { analyzeFeatureFlags } from "./analyze.js";
+import { fetchRelevantCode, indexRepository } from "./greptile.js";
+import { analyzeFeatureFlags, analyzeWithLintRule } from "./analyze.js";
 import { createNodeMiddleware, Webhooks } from "@octokit/webhooks";
 import { env } from "./env.js";
 import SmeeClient from "smee-client";
@@ -29,6 +29,7 @@ webhooks.on("push", async (event) => {
 });
 
 const app = express();
+app.use(express.json());
 
 app.get("/check/:owner/:repo", async function (req, res) {
   try {
@@ -53,9 +54,38 @@ app.get("/check/:owner/:repo", async function (req, res) {
   return res.status(200).send();
 });
 
+app.post("/lint/:owner/:repo", async function (req, res) {
+  try {
+    const { owner, repo } = req.params;
+    const { query } = req.body;
+    const octokit = await getOctokit(owner, repo);
+    const anthropicClient = new ClaudeSonnetClient();
+
+    const rule = await anthropicClient.getStructuredLintRule(query);
+
+    console.log(`Analyzing ${owner}/${repo} with rule: ${JSON.stringify(rule, null, 2)}`);
+
+    const fileWithRanges = await analyzeWithLintRule(
+      octokit,
+      owner,
+      repo,
+      "main",
+      rule
+    );
+
+    const changedFiles = await anthropicClient.invokeModelWithLintRule(fileWithRanges, rule);
+    const prUrl = await createPr(octokit, owner, repo, changedFiles);
+    console.log(`Created PR: ${prUrl}`);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send();
+  }
+});
+
 app.use(createNodeMiddleware(webhooks, { path: "/webhook" }));
 
 app.listen(3000);
+
 
 new SmeeClient({
   source: env.SMEE_URL,
