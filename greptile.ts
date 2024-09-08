@@ -1,3 +1,5 @@
+import { env } from "./env.js";
+
 export interface FeatureFlag {
     file_path: string;
     line_start: number;
@@ -5,9 +7,10 @@ export interface FeatureFlag {
     change_date: Date | null;
 }
 
+// HACK: This function assumes the repository has been indexed by Greptile
 export const fetchFeatureFlags = async (repository: string, branch: string): Promise<FeatureFlag[]> => {
-    const greptile_api_key = process.env.GREPTILE_API_KEY;
-    const github_token = process.env.GITHUB_TOKEN;
+    const greptile_api_key = env.GREPTILE_API_KEY;
+    const github_token = env.GITHUB_TOKEN;
 
     if (!greptile_api_key || !github_token) {
         throw new Error('Missing required environment variables');
