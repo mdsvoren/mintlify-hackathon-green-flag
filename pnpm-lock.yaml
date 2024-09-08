@@ -10,6 +10,9 @@ dependencies:
     version: 4.0.2
 
 devDependencies:
+  '@tsconfig/recommended':
+    specifier: ^1.0.7
+    version: 1.0.7
   typescript:
     specifier: ^5.5.4
     version: 5.5.4
@@ -243,6 +246,10 @@ packages:
       '@octokit/request-error': 6.1.4
       '@octokit/webhooks-methods': 5.1.0
     dev: false
+
+  /@tsconfig/recommended@1.0.7:
+    resolution: {integrity: sha512-xiNMgCuoy4mCL4JTywk9XFs5xpRUcKxtWEcMR6FNMtsgewYTIgIR+nvlP4A4iRCAzRsHMnPhvTRrzp4AGcRTEA==}
+    dev: true
 
   /@types/aws-lambda@8.10.145:
     resolution: {integrity: sha512-dtByW6WiFk5W5Jfgz1VM+YPA21xMXTuSFoLYIDY0L44jDLLflVPtZkYuu3/YxpGcvjzKFBZLU+GyKjR0HOYtyw==}
