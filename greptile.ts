@@ -21,7 +21,7 @@ export const fetchFeatureFlags = async (
   }
 
   try {
-    const response = await fetch("https://api.greptile.com/v2/search", {
+    const response = await fetch("https://api.greptile.com/v2/query", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${greptile_api_key}`,
@@ -29,7 +29,15 @@ export const fetchFeatureFlags = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        query: "Give me all of the files and lines that contain feature flags",
+        messages: [
+            
+                 {
+            "id": "123456",
+            "content": "Provide a structured JSON output with the filepath, linestart, and lineend of all areas that use feature flags. Provide only the JSON and nothing else. The output should be in the following format: [{\"filepath\": \"path/to/file\", \"linestart\": 10, \"lineend\": 15}, ...]",
+            "role": "user"
+        },
+            
+        ],
         repositories: [
           {
             remote: "github",
@@ -45,7 +53,8 @@ export const fetchFeatureFlags = async (
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const featureFlagsData = await response.json();
+    const responseData = await response.json();
+    const featureFlagsData = JSON.parse(responseData.message.match(/```json\n([\s\S]*?)\n```/)[1]);
     return featureFlagsData.map(
       ({
         filepath,
